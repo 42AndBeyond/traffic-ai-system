@@ -2,7 +2,7 @@
 
 A full-stack FastAPI and React web dashboard that predicts traffic congestion and accident risk, and optimizes safer routes across the Hanamkonda–Kazipet–Warangal road network.
 
-- **Live Web App:** hhttps://path-wise-app.onrender.com/
+- **Live Web App:** https://path-wise-app.onrender.com/
 - **Live API Docs:** https://path-wise.onrender.com/docs
 
 ## Features
