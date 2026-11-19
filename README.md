@@ -14,6 +14,15 @@ A full-stack FastAPI and React web dashboard that predicts traffic congestion an
 - Hourly traffic and incident pattern charts, predictive enforcement decision support, and an ML "what-if" risk simulator
 - Dark UI with clear visual risk indicators
 
+## Tech Stack
+
+- **Frontend:** React, Vite, Leaflet (OpenStreetMap), CSS
+- **Backend:** FastAPI, Python 3, Uvicorn, JWT Authentication
+- **Database:** SQLite (`traffic_system.db`)
+- **Machine Learning & Data:** Scikit-Learn, Pandas, NumPy
+- **Deployment:** Render (Static Site + Python Web Service)
+
+
 ## Setup (VS Code / Windows)
 
 1. Open the `traffic-ai-system` folder in VS Code.
