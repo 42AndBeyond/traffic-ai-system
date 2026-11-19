@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Polyline, CircleMarker, Popup } from "react-le
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import "leaflet/dist/leaflet.css";
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
@@ -53,7 +53,7 @@ export default function App() {
   const [routeErr, setRouteErr] = useState("");
 
   useEffect(() => {
-    fetch(`${API_BASE}/junctions`)
+    fetch(`${API_BASE_URL}/junctions`)
       .then((r) => r.json())
       .then((d) => setJunctions(d.junctions || []))
       .catch(() => {});
@@ -67,7 +67,7 @@ export default function App() {
 
   async function loadOverview(jwtToken) {
     try {
-      const res = await fetch(`${API_BASE}/analytics/overview`, {
+      const res = await fetch(`${API_BASE_URL}/analytics/overview`, {
         headers: { Authorization: `Bearer ${jwtToken}` },
       });
       if (res.ok) {
@@ -90,7 +90,7 @@ export default function App() {
     setAuthMsg("");
 
     if (mode === "register") {
-      const res = await fetch(`${API_BASE}/auth/register`, {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -113,7 +113,7 @@ export default function App() {
     form.append("username", username);
     form.append("password", password);
 
-    const res = await fetch(`${API_BASE}/auth/login`, {
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: form,
@@ -148,7 +148,7 @@ export default function App() {
 
   async function handlePredict(e) {
     e.preventDefault();
-    const res = await fetch(`${API_BASE}/predict`, {
+    const res = await fetch(`${API_BASE_URL}/predict`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(predForm),
@@ -161,7 +161,7 @@ export default function App() {
   async function handleOptimizeRoute(e) {
     e.preventDefault();
     setRouteErr("");
-    const res = await fetch(`${API_BASE}/routes/optimize`, {
+    const res = await fetch(`${API_BASE_URL}/routes/optimize`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(routeForm),
