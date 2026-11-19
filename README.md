@@ -1,33 +1,74 @@
-# PathWise — AI Smart Traffic & Accident Prediction System
+# PathWise — AI-Powered Traffic Intelligence & Accident Risk Prediction
 
-A full-stack FastAPI and React web dashboard that predicts traffic congestion and accident risk, and optimizes safer routes across the Hanamkonda–Kazipet–Warangal road network.
+**Don't just find the fastest route. Find the safer one.**
 
-- **Live Web App:** https://path-wise-app.onrender.com/
-- **Live API Docs:** https://path-wise.onrender.com/docs
+PathWise is an AI-powered traffic intelligence platform built around the Hanamkonda–Kazipet–Warangal road network. It combines machine learning, route optimization, traffic analytics, and interactive mapping to assess congestion and accident risk before a journey begins.
 
-## Features
+- **Live Web Application:** [PathWise Web App](https://path-wise-app.onrender.com/)
+- **Backend API Documentation:** [PathWise API Docs](https://path-wise.onrender.com/docs)
 
-- Role-based authentication separating **Driver / Commuter** accounts from **Traffic Police / Authority** accounts
-- Safe vs. fastest route optimization based on start/destination junctions, weather conditions, and vehicle type
-- Interactive Leaflet / OpenStreetMap view showing safest route paths and accident hotspot markers
-- Station-isolated analytics dashboard with logged incident counts, high-severity breakdowns, and average traffic volume
-- Hourly traffic and incident pattern charts, predictive enforcement decision support, and an ML "what-if" risk simulator
-- Dark UI with clear visual risk indicators
+---
 
-## Tech Stack
+## Overview
 
-- **Frontend:** React, Vite, Leaflet (OpenStreetMap), CSS
-- **Backend:** FastAPI, Python 3, Uvicorn, JWT Authentication
-- **Database:** SQLite (`traffic_system.db`)
-- **Machine Learning & Data:** Scikit-Learn, Pandas, NumPy
-- **Deployment:** Render (Static Site + Python Web Service)
+Traditional navigation applications focus primarily on reaching a destination quickly. PathWise evaluates traffic conditions, weather, vehicle type, historical incident records, and road network structure to recommend safer routes for commuters while giving traffic authorities analytical tools to monitor hotspots and simulate risk scenarios.
 
+---
 
-## Setup (VS Code / Windows)
+## Key Features
 
-1. Open the `traffic-ai-system` folder in VS Code.
-2. Open a terminal and start the backend server:
+### Driver / Commuter View
+- **Route Optimization:** Compares fastest and safer route options across 10 major junctions.
+- **Risk Scoring:** Evaluates accident risk based on weather conditions and vehicle type.
+- **Interactive Map:** Displays recommended routes and junction markers using Leaflet and OpenStreetMap.
 
+### Traffic Police / Authority View
+- **Station Analytics:** Displays isolated incident logs, high-severity breakdowns, and average traffic volume.
+- **Hotspot & Pattern Analysis:** Maps accident-prone junctions and visualizes hourly traffic and incident trends.
+- **ML Risk Simulator:** Runs what-if scenarios across different hours, weather conditions, road types, and vehicles alongside predictive enforcement recommendations.
+
+---
+
+## Technology Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React, Vite, JavaScript, Leaflet (OpenStreetMap) |
+| Backend | Python, FastAPI, Uvicorn |
+| Database | SQLite |
+| Machine Learning | Scikit-learn, Pandas, NumPy |
+| Authentication | JWT, Role-Based Access Control |
+| Deployment | Render |
+
+---
+
+## System Architecture
+
+```text
+User -> React Frontend (Vite) -> FastAPI Backend -> ML Engine & Auth -> SQLite Database
+```
+
+### Core Backend Modules
+- `backend/main.py` — FastAPI server, JWT authentication, and REST endpoints (`/auth/register`, `/auth/login`, `/junctions`, `/routes/optimize`, `/analytics/overview`, `/predict`).
+- `backend/ml_engine.py` — Machine learning models for congestion and accident risk prediction.
+- `backend/database.py` — SQLite database setup and data operations.
+
+---
+
+## Local Setup
+
+### Prerequisites
+- Python 3.10+
+- Node.js and npm
+- Git
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com
+cd traffic-ai-system
+```
+
+### 2. Start the Backend
 ```bash
 cd backend
 python -m venv venv
@@ -35,32 +76,27 @@ venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
+Backend runs at `http://localhost:8000` (API docs at `http://localhost:8000/docs`).
 
-3. Open a second terminal and start the frontend app:
-
+### 3. Start the Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+Frontend runs at `http://localhost:5173`.
 
-4. Open http://localhost:5173 in your browser.
+---
 
-## How it works
+## Quick Demo Guide
 
-- `backend/main.py` runs the FastAPI server, JWT authentication, and REST endpoints (`/auth`, `/junctions`, `/routes/optimize`, `/analytics/overview`, `/predict`).
-- `backend/ml_engine.py` trains and runs the machine learning models to score accident risk and congestion levels.
-- `backend/database.py` manages the SQLite database (`traffic_system.db`) storing junctions, road edges, historical records, and station accounts.
-- `frontend/src/App.jsx` renders the role-based React dashboard, Leaflet maps, and analytics charts.
+- **Driver Demo:** Register as a **Driver / Commuter**, select a route (such as `NIT Gate / Fatimanagar` to `MGM Hospital Junction`), choose `Rain` and `Two-Wheeler`, and compare the suggested routes and risk scores.
+- **Authority Demo:** Register as a **Traffic Police / Authority** user (such as `Subedari Traffic PS`) to view station analytics, accident hotspots, hourly charts, and the ML risk simulator.
 
-## Demo tips
+---
 
-- **Driver View:** Create a `Driver / Commuter` account, pick two junctions (such as `NIT Gate / Fatimanagar` to `MGM Hospital Junction`), switch weather to `Rain` and vehicle to `Two-Wheeler`, and compare risk scores.
-- **Police Authority View:** Create a `Traffic Police / Authority` account (e.g., `Subedari Traffic PS`) to unlock the **Authority & Analytics** tab, hotspot map, and ML simulator.
-- **API Testing:** Visit `/docs` on the backend URL to test endpoints directly in Swagger UI.
+## Scope & Limitations
 
-## Notes
-
-- Hosted on Render's free tier; if inactive, the backend may take ~50 seconds to wake up on the first login or request.
-- The current road network covers 10 major junctions across Hanamkonda, Kazipet, and Warangal.
-- Live multi-city geocoding and real-time GPS traffic feeds can be added as future upgrades.
+- **Current Coverage:** Covers 10 major junctions across Hanamkonda, Kazipet, and Warangal in Telangana, India.
+- **Future Scope:** Multi-city road network integration, live GPS traffic feeds, and automated incident alerts.
+- **Hosting Note:** Deployed on Render's free tier; the first request after inactivity may take up to 50 seconds to wake up.
