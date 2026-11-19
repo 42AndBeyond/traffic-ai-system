@@ -23,14 +23,11 @@ export default function App() {
   const [authMsg, setAuthMsg] = useState("");
   const [authErr, setAuthErr] = useState("");
 
-  const [tab, setTab] = useState("authority");
+  const [tab, setTab] = useState(() => (
+    localStorage.getItem("role") === "authority" ? "authority" : "driver"
+  ));
   const [overview, setOverview] = useState(null);
   const [junctions, setJunctions] = useState([]);
-
-  // CSV Upload
-  const [csvFile, setCsvFile] = useState(null);
-  const [datasetLabel, setDatasetLabel] = useState("Custom Station Upload");
-  const [uploadMsg, setUploadMsg] = useState("");
 
   // ML Predictor state
   const [predForm, setPredForm] = useState({
@@ -79,7 +76,7 @@ export default function App() {
         setAuthInfo((prev) => ({
           ...prev,
           active_dataset: data.active_dataset,
-          station_name: data.station_name,
+          ...(prev.role === "authority" ? { station_name: data.station_name } : {}),
         }));
       }
     } catch {
@@ -147,31 +144,6 @@ export default function App() {
     localStorage.clear();
     setToken("");
     setOverview(null);
-  }
-
-  async function handleCsvUpload(e) {
-    e.preventDefault();
-    setUploadMsg("");
-    if (!csvFile) return;
-
-    const fd = new FormData();
-    fd.append("file", csvFile);
-
-    const res = await fetch(
-      `${API_BASE}/datasets/upload?dataset_name=${encodeURIComponent(datasetLabel)}`,
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd,
-      }
-    );
-    const data = await res.json();
-    if (!res.ok) {
-      setUploadMsg(data.detail || "Upload failed");
-      return;
-    }
-    setUploadMsg(`Loaded ${data.records_loaded} rows into "${data.dataset_label}".`);
-    loadOverview(token);
   }
 
   async function handlePredict(e) {
@@ -321,16 +293,20 @@ export default function App() {
         <div>
           <span className="brand">AI Smart Traffic &amp; Accident Prediction</span>
           <span style={{ marginLeft: 12, fontSize: 13, color: "#94a3b8" }}>
-            {authInfo.station_name} ({authInfo.username})
+            {authInfo.role === "authority"
+              ? `${authInfo.station_name} (${authInfo.username})`
+              : `Driver: ${authInfo.username}`}
           </span>
         </div>
         <div className="row">
-          <button
-            className={tab === "authority" ? "" : "secondary"}
-            onClick={() => setTab("authority")}
-          >
-            Authority &amp; Analytics
-          </button>
+          {authInfo.role === "authority" && (
+            <button
+              className={tab === "authority" ? "" : "secondary"}
+              onClick={() => setTab("authority")}
+            >
+              Authority &amp; Analytics
+            </button>
+          )}
           <button
             className={tab === "driver" ? "" : "secondary"}
             onClick={() => setTab("driver")}
@@ -349,7 +325,11 @@ export default function App() {
             <div className="grid-3" style={{ marginBottom: 18 }}>
               <div className="card" style={{ marginBottom: 0 }}>
                 <div style={{ fontSize: 12, color: "#94a3b8" }}>ACTIVE STATION DATASET</div>
-                <div className="kpi-val" style={{ fontSize: 18 }}>{overview.active_dataset}</div>
+                <div className="kpi-val" style={{ fontSize: 18 }}>
+                  {overview.active_dataset === "Default Baseline Dataset"
+                    ? "Hanamkonda–Warangal Traffic Dataset v1"
+                    : overview.active_dataset}
+                </div>
                 <div className="kpi-sub">Isolated to Org #{overview.org_id}</div>
               </div>
               <div className="card" style={{ marginBottom: 0 }}>
@@ -419,24 +399,6 @@ export default function App() {
                   </div>
                 ))}
 
-                <hr style={{ borderColor: "#1f2937", margin: "16px 0" }} />
-                <h3>Upload Station CSV Dataset</h3>
-                <form onSubmit={handleCsvUpload}>
-                  <div className="row" style={{ marginBottom: 10 }}>
-                    <input
-                      placeholder="Dataset label"
-                      value={datasetLabel}
-                      onChange={(e) => setDatasetLabel(e.target.value)}
-                    />
-                    <input
-                      type="file"
-                      accept=".csv"
-                      onChange={(e) => setCsvFile(e.target.files?.[0] || null)}
-                    />
-                    <button type="submit">Upload CSV</button>
-                  </div>
-                  {uploadMsg && <div className="ok-text">{uploadMsg}</div>}
-                </form>
               </div>
 
               <div className="card">
