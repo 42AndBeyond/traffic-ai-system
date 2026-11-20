@@ -81,3 +81,6 @@ npm run dev
 - **Current Coverage:** Covers 10 major junctions across Hanamkonda, Kazipet, and Warangal in Telangana, India.
 - **Future Scope:** Multi-city road network integration, live GPS traffic feeds, and automated incident alerts.
 - **Hosting Note:** Deployed on Render's free tier; the first request after inactivity may take up to 50 seconds to wake up.
+ 
+## Project Links 
+- LinkedIn Demo Video: https://lnkd.in/p/d4796gSQ 
