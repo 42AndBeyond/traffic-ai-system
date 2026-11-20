@@ -83,4 +83,4 @@ npm run dev
 - **Hosting Note:** Deployed on Render's free tier; the first request after inactivity may take up to 50 seconds to wake up.
  
 ## Project Links 
-- LinkedIn Demo Video: https://lnkd.in/p/d4796gSQ 
+- LinkedIn Demo Video: https://lnkd.in/p/dJBR8DGk/p/d4796gSQ 
